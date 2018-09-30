@@ -1,40 +1,54 @@
-string add(string str1, string str2) 
-{ 
-    if (str1.length() > str2.length()) 
-        swap(str1, str2); 
-    string str = ""; 
-  
-    // Calculate lenght of both string 
-    int n1 = str1.length(), n2 = str2.length(); 
-  
-    // Reverse both of strings 
-    reverse(str1.begin(), str1.end()); 
-    reverse(str2.begin(), str2.end()); 
-  
-    int carry = 0; 
-    for (int i=0; i<n1; i++) 
-    { 
-        // compute sum of 
-        // current digits and carry 
-        int sum = ((str1[i]-'0')+(str2[i]-'0')+carry); 
-        str.push_back(sum%10 + '0'); 
-  
-        // Calculate carry for next step 
-        carry = sum/10; 
-    } 
-  
-    // Add remaining digits of larger number 
-    for (int i=n1; i<n2; i++) 
-    { 
-        int sum = ((str2[i]-'0')+carry); 
-        str.push_back(sum%10 + '0'); 
-        carry = sum/10; 
-    }  
-    if (carry) 
-        str.push_back(carry+'0'); 
-  
-    // reverse resultant string 
-    reverse(str.begin(), str.end()); 
-  
-    return str; 
-} 
+string add(string res,string s)
+{
+    string str="";
+    ll i;
+    ll a=res.length();
+    ll b=s.length();
+    ll c=min(a,b);
+    ll d=max(a,b);
+    //cout<<"min is"<<c<<" max is"<<d<<endl;
+    int carry=0;
+    reverse(s.begin(),s.end());
+    reverse(res.begin(),res.end());
+    for(i=0;i<c;i++)
+    {
+        int f=res[i]-'0'+s[i]-'0'+carry;
+        int x=f%10;
+        carry=f/10;
+        str.push_back(x+'0');
+        //cout<<str[i]<<" ";
+    }
+    //cout<<str<<endl;
+    if(c==d)
+    {
+        if(carry!=0)
+        {
+            str.push_back(carry+'0');
+            reverse(str.begin(),str.end());
+        }
+        else
+        {
+            reverse(str.begin(),str.end());
+        }
+        //cout<<str<<endl;
+        return str;
+    }
+    else
+    {
+        string s1;
+        if(d==a)
+            s1=res;
+        else
+            s1=s;
+        for(i=c;i<d;i++)
+        {
+            int f=s1[i]-'0'+carry;
+            str.push_back(f%10+'0');
+            carry=f/10;
+        }
+        if(carry!=0)
+            str.push_back(carry+'0');
+        reverse(str.begin(),str.end());
+        return str;
+    }
+}
