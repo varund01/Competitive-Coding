@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+struct act
+{
+	int start;
+	int finish;
+};
+bool compare(act a,act a1)
+{
+	return (a.finish<a1.finish);
+}
+void pmaxac(act a[],int n)
+{
+	sort(a,a+n,compare);
+	int i=0;
+	cout<<a[0].start<<" "<<a[0].finish<<endl;
+	int j;
+	for(j=1;j<n;j++)
+	{
+		if(a[j].start>a[i].finish)
+		{
+			cout<<a[j].start<<" "<<a[j].finish<<endl;
+			i=j;
+		}
+	}
+}
+main()
+{
+	int n,i;
+	cin>>n;
+	act a[n];
+	for(i=0;i<n;i++)
+	{
+		cin>>a[i].start;
+		cin>>a[i].finish;
+	}
+	pmaxac(a,n);
+}
