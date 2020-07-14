@@ -1,0 +1,90 @@
+//segment tree
+struct item{
+	int val;
+	int count;
+};
+
+
+struct segtree{
+
+	int size;
+	vector<item> values;
+	item neutral(){    //change them accordingly
+		item n;
+		n.val=INT_MAX;
+		n.count=0;
+		return n;
+	}
+	item merge(item a,item b){
+		item n;
+		n.val=min(a.val,b.val);
+		if(a.val>b.val){
+			n.count=b.count;
+		}
+		else if(a.val<b.val){
+			n.count=a.count;
+		}
+		else{
+			n.count=a.count+b.count;
+		}
+		return n;
+	}
+	item single(int a,int b){
+		item n;
+		n.val=a;
+		n.count=b;
+		return n;
+	}
+
+
+	void init(int n){
+		size=1;
+		while(size < n){
+			size*=2;
+		}
+		values.assign(2*size,single(INT_MAX,0));
+	}
+
+
+	void build(vector<int> &a,int pos,int lx,int rx){
+		if(rx-lx==1){
+			if(lx<(int)a.size())
+				values[pos]=single(a[lx],1);
+			return;
+		}
+		int mid=lx+(rx-lx)/2;
+		build(a,2*pos+1,lx,mid);
+		build(a,2*pos+2,mid,rx);
+		values[pos]=merge(values[2*pos+1],values[2*pos+2]);
+	}
+	void build(vector<int> &a){
+		build(a,0,0,size);
+	}
+
+	void set(int i,int v,int x,int lx,int rx){
+		if(rx-lx==1){
+			values[x]=single(v,1);
+			return;
+		}
+		int mid=lx+(rx-lx)/2;
+		if(i<mid)
+			set(i,v,2*x+1,lx,mid);
+		else
+			set(i,v,2*x+2,mid,rx);
+		values[x]=merge(values[2*x+1],values[2*x+2]);
+	}
+	void set(int i,int v){
+		set(i,v,0,0,size);
+	}
+
+	item sum(int l,int r,int x,int lx,int rx){
+		if(l>=rx || lx>=r) return neutral();
+		if(lx>=l && rx<=r) return values[x];
+		int mid=lx+(rx-lx)/2;
+		return merge(sum(l,r,2*x+1,lx,mid),sum(l,r,2*x+2,mid,rx));
+	}
+	item sum(int l,int r){
+		return sum(l,r,0,0,size);
+	}
+
+};
